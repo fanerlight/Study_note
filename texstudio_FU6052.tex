@@ -1,0 +1,182 @@
+\documentclass[a4papaer,utf8,12pt,draft,titlepage]{ctexart}
+\usepackage{sectsty}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\setlength{\parskip}{0.6cm plus4mm minus4mm}
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{0.8cm}{0.0cm}
+
+	\begin{document}
+		\title{正则表达式学习笔记}
+		\author{LEE BEN\\PKU}
+		%\date{\today}
+		\maketitle
+		\renewcommand{\abstractname}{序言}
+		\begin{abstract}
+			正则表达式在处理字符串程序中可以发挥很重要的作用。在文本搜索、合法性检验、网页爬取等方面应用广泛。突然想起学习正则表达式，其实是想利用起这一段宝贵的时光，学习一些新的知识。后续我会继续学习Python、TensorFlow和机器学习相关的知识，并且尽量使用LaTeX进行排版。总之这一段时光应该有不错的收获。
+		\end{abstract}
+	
+	\tableofcontents
+	\newpage
+		\section{正则表达式的定义}
+		正则表达式描述了一类规则，用于匹配大量字符中的指定字符串。我们处理最多的数据类型就是字符和字符串，这在计算机内部也是最容易被识别和处理的。每个字符占用1字节(8位)的内存，采用指定的编码方式进行呈现。无论是字母、数字、符号，还是由他们组成的长串，有时会按特定的规则进行排列，有着特别的意义。而想要从大量混杂的文本中找到我们所需的字符串们，就需要借助正则表达式来完成。
+		\section{正则表达式用在何处}
+		在微软的microoffice中，我们知道有通配符这种东西。但是通配符不能用于很多编程语言。正则表达式则不同，他可以成为各种编程语言的库文件，而匹配规则不变。在C++、C\#、Python中都有各自的库文件和方法调用。具体方法的不同暂且不表，掌握正则表达式的基本规则后，才是最根本最重要的。
+		\section{字符匹配表达式}
+			\subsection{正向字符匹配}
+			所谓正向匹配，就是得到需要匹配的字符。
+			
+			如果指定到某一个字符，比如a，那么在正则表达式中直接写a即可。但是对于完全指定的字符或者字符串，其实没有匹配的必要：因为我们都已经知道了该字符串。更多情况下，我们想要匹配的是一类字符。下面就是用于匹配一类字符的元字符(metacharacters)。
+			
+		%	\begin{itemize}
+		%		\item[\textbackslash{}w] 表示字母、下划线、数字或汉字
+		%		\item[\textbackslash{}s] 表示空白符
+		%	\end{itemize}
+		\begin{table}[h]
+			\begin{tabular}{lllll}
+				\textbackslash{}w & 表示字母、下划线、数字或汉字 &  &  &  \\
+				\textbackslash{}s & 表示空白符          &  &  &  \\
+				\textbackslash{}d & 表示数字           &  &  &  \\
+				.                 & 表示除换行符之外的任意字符  &  &  & 
+			\end{tabular}
+		\end{table}
+			使用以上的元字符，就可以匹配文本中对应含义的一个字符。	
+			
+			如果要匹配字符集合中的一个，那么就可以使用方括号将这些集合包在一起。比如[abc]匹配abc三个字母中的其中一个，或a或b或c。[\textbackslash{}d\textbackslash{}s]匹配数字或者空白符。
+			\subsection{反向字符匹配}
+			所谓反向匹配，就是要避开某个或者某类字符的匹配。
+			
+			比如需要取得一个不是小写字母a的字符，就应该表示为[ \^{} a ] 。这里[ ]的作用是将\^和a看做绑定在一起的东西。因为单独的一个\^是由其自身意义的(匹配字符串开端的位置)。而对于一类反向匹配字符，同正向匹配字符一样，是存在特殊命令的。
+			\begin{table}[h]
+				\begin{tabular}{lllll}
+					\textbackslash{}W & 表示非字母、下划线、数字或汉字，可以是标点符号 &  &  &  \\
+					\textbackslash{}S & 表示非空字符          &  &  &  \\
+					\textbackslash{}D & 表示非数字           &  &  &  \\
+					%.                 & 表示除换行符之外的任意字符  &  &  & 
+				\end{tabular}
+			\end{table}
+		\section{数量匹配}
+			\subsection{固定长度或数量}
+				当我们想要让一个或一类字符重复出现指定次数时(比如手机号码为11位以1开头的字符串)，就需要让\textbackslash{}d重复10遍(除了第一位我们用1)。于是固定长度我们可以用{重复次数}来表示。于是1\textbackslash{}d{10}就可以匹配手机号码了。
+				
+				exp\{n\}表示对表达式exp重复n次的字符串
+			\subsection{不定长度或数量}
+				当我们想要获取exp重复的数量在一定范围或者我们不知道exp会重复多少次的字符串(比如一个非常长的英文单词)，这时需要用到花括号的另一种用法或者另外的元字符。
+				
+					\begin{table}[h]
+					\begin{tabular}{lllll}
+						exp* & 表示exp可以重复0次及以上&  &  &  \\
+						exp+ & 表示exp可以重复1次及以上          &  &  &  \\
+						exp？& 表示exp可以重复0次或1次（可有可无的意思）           &  &  &  \\
+						exp\{n,\}               & 表示exp可以重复n次及以上  &  &  &\\
+						exp\{n,m\} &表示exp可以重复n到m次 
+					\end{tabular}
+				\end{table}
+				所以如果我们想要匹配-、空格或者~作为电话号码之间的连词符，而又要面临着有些电话号码并没有连词符的情况，便可以使用[- ~]？来表示。
+				\subsubsection{贪婪数量匹配与懒惰数量匹配}
+					如果我们在aabbcb中查找以a开头以b结尾的字符串，直接使用a\textbackslash{}w*b得到的结果会是aabbcb，而不是aab。这是因为*默认为贪婪匹配，即符合条件的最长字符串。
+					
+					如果我们想要得到aab，则要在数量匹配符*后面加一个？，来表示懒惰匹配，即重复表达式exp次数最少的那个匹配。a[a-z]*?b就可得出aab的匹配。同理，当?加在不定长度数量符后，就都表示懒惰匹配。
+		\section{位置匹配}
+			前面所说的匹配，都是exp要在文本中找到0个以上字符。也就是说，匹配得到的结果是包含着exp中的字符的。而在某些时候，我们知道exp前后的格式，而想要从中抽出exp时，就要找到这些特殊的位置。比如单词之间可能会被数字、标点、空白所隔，也可能处于字符串的开头，要找到这些单词，就要分别找到单词的开头和结尾位置。\textbackslash{}b的作用就是找到这个开头或者结尾。因此找到一个单词的正则表达式为\textbackslash{}b[a-zA-Z]+\textbackslash{}b。这只是一个简单的例子，实际上匹配位置有元字符和用户自定义两种。
+			\subsection{元字符匹配位置}
+				\begin{table}[h]
+					\begin{tabular}{lll}
+						\textbackslash{}b & 匹配英文单词的开端和结束位置\\
+						\^ & 匹配整个字符串的开端\\
+						\$ & 匹配整个字符串的结尾
+					\end{tabular}
+				\end{table}
+			\subsection[零宽断言]{用户自定义匹配位置}
+				用户自己知道想要找到的字符串前后有着特殊字符出现或者特殊格式，比如前缀为re的单词，我们想要找到re之后的词；又或者后缀为ing的单词，我们想找出其原型。这是我们就要匹配re后面的位置或者ing前面的位置。
+				\subsubsection{正向零宽断言}
+					正向零宽断言就是要找到符合某格式的位置，分为前后两种。要匹配的字符串前面有固定格式时(比如re后面的单词，其前面总是re两个字母)，此时用前缀匹配：(?<=exp)，表示exp后面紧接的位置；当我们要找带有固定后缀的字符串时，使用后缀匹配(?=exp)，表示exp前面的位置。
+				\subsubsection{反向零宽断言}
+					反向零宽断言匹配的非exp前缀或者后缀的位置，使用！替换正向零宽断言中的=即可。这个用法还不常见，所以在这里暂且不表。
+					
+		\section{分组}
+			单个字符的重复是直接在其后面加数量匹配的字符或者{n}，如果是字符串的重复就要用到分组的概念。用()将需要重复的字符串包括起来，从而成为一个整体，用来重复。比如IPv4的表达：((2[0-4]\textbackslash{}d|25[0-5]|[01]?[0-9]?[0-9])\textbackslash{}.){3}(2[0-4]\textbackslash{}d|25[0-5]|[01]?[0-9]?[0-9])\textbackslash{}。可以看出这其中有两层分组，小组是用|分隔开的不同情况中的一个(或门)，大组是0-255.，这个大组将会重复3次，在第四个重复时没有.，所以要单独再写一次。
+			
+			一般来说，圆括号会对exp进行自动分组编号，但是如果想要人为地给小组进行编号，那么使用的语法为：(?<GroupName>exp)或者(?'GroupName'exp)，这样的话不仅会匹配exp，而且还会将其组名变为GroupName，这在之后的平衡小组中会起到作用。
+			
+			\subsection{分组后的引用}
+				使用分组后，正则表达式会对其进行编号，并且可以直接引用。引用的方法为\textbackslash{}编号，表示该编号对应的组的匹配。比如：(1[0-9])\textbackslash{}1这个正则表达式，如果(1[0-9])匹配到了12，那么\textbackslash{}1也表示12，整个的匹配结果就是1212。
+			
+			\subsection{平衡组和递归引用}
+				当需要匹配出一段字符串中最长的相互匹配的括号之间的字符时，单纯使用简单匹配是无法做到的，因为这不能保证匹配结果中左右括号的数量一致。我们在数据结构中学过栈的知识，并且知道利用栈可以检查字符串中的括号匹配问题。在这里，由于我们可以对分组进行编号，所以同样可以利用这个原理来找到最长的匹配字符串。
+				
+				思路为遇到左括号压栈，遇到右括号出栈，最终判断栈是否为空。之前分组之所以可以被后向引用，实际上是被压入了栈，即被捕获。
+				
+				正则表达式为：首先是最外层的一对括号，接着向后匹配，如果是左括号，则分组编号+1，如果是右括号，则分组编号-1，如果不是括号，那么继续。当匹配到字符尾或者分组编号等于0的时候，进入(?('name')(?!))判断。如果为零，则匹配成功，否则匹配失败。
+		\section{转义}
+			上述的很多元字符，如果成为需要匹配的一部分，则需要经过转义才能够表示。这和其他编程语言是相同的。需要转移的元字符包括：
+			
+			\begin{itemize}
+				\item {.} 
+				\item{?}
+				\item{-}
+				\item{\textbackslash}
+				\item{*}
+				\item{+}
+				\item{(}
+				\item{)}
+				\item{$\lbrace$}
+				\item{$\rbrace$}
+				\item \^
+				\item \$
+			\end{itemize}
+			需要注意的是，如果放在[]中，则所有的元字符都不表示转义，可以直接用于匹配。
+			
+			有关?的用法，到现在为止一共有五种：可以转义为?；可以表示0次或1次重复；加在重复字符之后表示懒惰匹配；与=或者!结合表示零宽断言；自定义编号中用于强制取消分组或指定分组名称。
+		
+		\section{程序中的正则表达式应用}
+			正则表达式的基本语法是通用的，但是到了不同的编程语言中，会有不同的用法。因为常用C++和Python，所以这里主要介绍在这两种语言中的regular expression的应用方法。(regex)
+			\subsection{C++中的regex应用}
+				C++11中的STL库中有头文件<regex>，包含着regex相关的类：regex类、match\_result模板类(包括smatch类、cmatch类)、sregex\_iterator类等，并且包含相关方法：regex\_match()、regex\_search()、regex\_repalce()等。下面我们从需求方面来运用这些类和方法。
+				
+				因为regex是STL中的部分，所以其源文本都使用std::string类型的数据。但是经过试验，可能C++中并不支持零宽后行断言。但Python支持零宽后行断言。
+				\subsubsection{match\_result类}
+					正则表达式最为重要的部分就是对匹配结果的分析。C++11中使用match\_result类来表示符合regex的\textbf{一个}匹配。在这个匹配中有很多的sub\_match。如果regex是分n组的，那么一个match\_result就有n+1个sub\_match。第一个sub\_match是整个regex的匹配，剩下的n个分别对应n个组的匹配。每一个sub\_match都有方法str()，用来返回匹配的字符串，同时有first和second属性，反映该匹配在源文本中的位置。
+					
+					在匹配、查找的时候，match\_result类很重要。如果要直接查看匹配得到的文本，那么可以使用数组的方括号索引取出第0个submatch。
+				\subsubsection{匹配}
+					匹配的含义是对源字符串\textbf{整体}进行检查，查看其是否符合regex的模式。使用的方法为regex\_match()，用到的类有regex类、match\_result类。方法返回bool值告知是否匹配成功。
+					
+					regex\_match()有输入参数和输出参数。输入参数为源文本和正则表达式，输出参数主要是匹配结果，存放在match\_result类型的变量中。smatch类型内部实质上是string，cmatch类型内部实质上是一个C\_style字符串，两者差距不大。
+					
+				\subsubsection{查找}
+					相比匹配是检查\textbf{整个}源文本是否符合regex的情况，search是在源文本\textbf{之中}找寻是否存在符合regex的文本。regex\_match()方法同样返回布尔值来表示是否找到结果。
+					
+					输入参数和输出参数与regex\_match()的相同，需要注意的是对match\_result的填充只是源文本中第一个匹配到regex的字符串，并不是源文本中符合regex的全部字符串。
+					
+				\subsubsection{逐一查找}
+					使用到sregex\_iterator类，此外还有cregex\_iterator，类似smatch和cmatch类的区分。其默认构造函数返回迭代器超尾，可用于遍历结果。
+					
+					首先构造匹配的迭代器，输入参数为源文本的开始和超尾、正则表达式regex。将解地址符(*)作用于每个迭代器，得到的恰好是对应的match\_result，如果是s就对应smatch，c就对应cmatch。之后便可以使用对match\_result的处理方法来查看各个匹配结果了。
+					
+					sregex\_iterator it(s.begin(),s.end(),re),itend;
+					
+					for(auto i=it;i!=itend;i++){
+						cout<<(*i).str()<<endl;
+					}
+				\subsubsection{分割}
+					当我们需要使用regex的匹配文本去对源文本进行分割时，类似regex\_iterator一样，有一个类为regex\_token\_iterator，其构造函数还接受一个flag值，如果为0，效果同regex\_iterator，如果为-1，则正好是以所有匹配字符串为分割的字符串集合；如果是正整数n，则是以每个matchresult的第n个sub\_match为结果。
+				\subsubsection{替换}
+					替换是我们常常需要做的工作，这让我联想到很多编辑器中的Ctrl+F。在C++中使用的方法为regex\_repalce()。该方法要求源文本、regex和用于替换的格式化字符串，或者直接用该字符串替代匹配结果。只需要调用一次，replace会将源文本中所有匹配的地方替换成我们指定的字符串。
+					
+			\subsection{Python中的regex应用}
+				Python同样是面向对象的语言，其对正则表达式的应用同C++中类似。比较不同的地方就是Python并不需要手动创建regex对象，而是直接import re这个模块，使用re的方法。
+				\subsubsection{re的构造}
+					给入一个字符串，调用re.compile()方法，自动返回一个regex对象(pattern)，之后便可以使用这个pattern去匹配字符了。
+				\subsubsection{匹配}
+					re.match()。含义和用法同C++的regex\_match()一样，都是对整个字符串的格式进行检查。如果匹配不成功，返回none，如果匹配成功，返回true。
+				\subsubsection{查找}
+					re.search()
+				\subsubsection{逐一查找}
+					这里有两个方法：re.findall()和re.finditer()。前者返回一个list，里面包含所有匹配成功的字符串，后者返回一个迭代器，类型与match\_result的sub\_match相似，有成员start、end，但不同之处是start、end直接指示第几位而非一个抽象的迭代器，还有方法group()类似于sub\_match的str()方法。
+				\subsubsection{分割}
+					Python的正则表达式分割很直接，即re.split()，不像C++中的使用tokeniterator才能实现。
+				\subsubsection{修饰符的选择}
+					re模块有很多修饰符，即flag，这在调用其匹配方法的时候可以选择，具体可参考http://www.runoob.com/python/python-reg-expressions.html。
+					
+\end{document}
